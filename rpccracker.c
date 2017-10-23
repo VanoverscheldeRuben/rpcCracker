@@ -5,6 +5,7 @@
 
 #include <argumenthandler.h>
 #include <help.h>
+#include <cmd.h>
 
 #define ARG_USER "-u"
 #define ARG_PASSWD "-p"
@@ -91,8 +92,9 @@ int main(int argc, char **argv)
             int output;
             pass_line[strcspn(pass_line, "\n")] = 0; // Remove trailing newline
 
-            sprintf(command, "rpcclient -U \"%s\"%\"%s\" -c \"testme\" %s > /dev/null 2>&1", user_line, pass_line, ip);
-            output = system(command);
+            //sprintf(command, "rpcclient -U \"%s\"%\"%s\" -c \"testme\" %s > /dev/null 2>&1", user_line, pass_line, ip);
+            //output = system(command);
+			output = executeRcpClientTestmeCmd(command, user_line, pass_line, ip);
             if (output == 0) {
 				printf("\n");
                 printf("Valid credentials for host %s:\n", ip);
