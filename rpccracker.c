@@ -49,8 +49,10 @@ int main(int argc, char **argv)
     }
 	
 	/*** Check if the user requested the help screen ***/
-	if (help == 1)
+	if (help == 1) {
 		displayHelpScreen();
+		exit(EXIT_SUCCESS); // It's either using the app, or getting help
+	}
 	
 	/*** Check arguments for errors ***/
 	/** Check if minimal arguments are set **/
@@ -67,18 +69,21 @@ int main(int argc, char **argv)
 
     user_fp = fopen(user_file_path, "r");
 	pass_fp = fopen(pass_file_path, "r");
-    if (user_fp == NULL || pass_line == NULL)
+    if (user_fp == NULL) {
+		printf("Error: user list %s does not exist", user_file_path);
         exit(EXIT_FAILURE);
+	}
+	else if (pass_line == NULL) {
+		printf("Error: password list %s does not exist", pass_file_path);
+        exit(EXIT_FAILURE);
+	}
 
     while ((user_read = getline(&user_line, &user_len, user_fp)) != -1) {
-        //FILE *pass_fp;
         char *pass_line = NULL;
         size_t pass_len = 0;
-        //ssize_t pass_read;
-
-        /*pass_fp = fopen(pass_file_path, "r");
-        if (pass_fp == NULL)
-            exit(EXIT_FAILURE);*/
+		
+		printf("\n");
+        printf("Trying user %s\n", user_line);
 
         user_line[strcspn(user_line, "\n")] = 0; // Remove trailing newline
         
@@ -89,23 +94,23 @@ int main(int argc, char **argv)
             sprintf(command, "rpcclient -U \"%s\"%\"%s\" -c \"testme\" %s > /dev/null 2>&1", user_line, pass_line, ip);
             output = system(command);
             if (output == 0) {
+				printf("\n");
                 printf("Valid credentials for host %s:\n", ip);
                 printf("\tUsername:\t%s\n", user_line);
                 printf("\tPassword:\t%s\n", pass_line);
-                printf("\n");
             }
         }
     
         if (pass_line)
             free(pass_line);
-    
-        fclose(pass_fp);
     }
 
     fclose(user_fp);
+	fclose(pass_fp);
 
     if (user_line)
         free(user_line);
 
+	puts(""); // Add extra line to cleanly separate the output at the end
     exit(EXIT_SUCCESS);
 }
