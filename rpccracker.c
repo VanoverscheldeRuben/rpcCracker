@@ -4,16 +4,19 @@
 #include <string.h>
 
 #include <argumenthandler.h>
+#include <help.h>
 
 #define ARG_USER "-u"
 #define ARG_PASSWD "-p"
 #define ARG_IP "-i"
+#define ARG_HELP "-h"
 
 int main(int argc, char **argv)
 {
     char * user_file_path = NULL;
     char * pass_file_path = NULL;
     char * ip = NULL;
+	int help;
 	
 	int argCheck;
 
@@ -35,12 +38,19 @@ int main(int argc, char **argv)
                 i++;
                 setStrArgument(&ip, argv[i]);
             }
+			else if (strcmp(ARG_HELP, argv[i]) == 0) {
+                help = 1;
+            }
             else {
                 printf("Error: argument %s not recognised\n", argv[i]);
                 exit(EXIT_FAILURE);
             }
         }
     }
+	
+	/*** Check if the user requested the help screen ***/
+	if (help == 1)
+		displayHelpScreen();
 	
 	/*** Check arguments for errors ***/
 	/** Check if minimal arguments are set **/

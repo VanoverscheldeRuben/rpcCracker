@@ -1,3 +1,5 @@
+#include <argumenthandler.h>
+
 void setStrArgument(char ** variable, char * arg) {
     *variable = arg;
 }
