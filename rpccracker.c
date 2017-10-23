@@ -3,9 +3,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <argumenthandler.h>
-#include <help.h>
-#include <cmd.h>
+#include "argumenthandler.h"
+#include "help.h"
+#include "cmd.h"
 
 #define ARG_USER "-u"
 #define ARG_PASSWD "-p"
@@ -17,9 +17,9 @@ int main(int argc, char **argv)
     char * user_file_path = NULL;
     char * pass_file_path = NULL;
     char * ip = NULL;
-	int help;
+    int help;
 	
-	int argCheck;
+    int argCheck;
 
     char command[100];
 
@@ -74,7 +74,7 @@ int main(int argc, char **argv)
 		printf("Error: user list %s does not exist", user_file_path);
         exit(EXIT_FAILURE);
 	}
-	else if (pass_line == NULL) {
+	else if (pass_fp == NULL) {
 		printf("Error: password list %s does not exist", pass_file_path);
         exit(EXIT_FAILURE);
 	}

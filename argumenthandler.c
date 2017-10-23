@@ -1,4 +1,7 @@
-#include <argumenthandler.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+#include "argumenthandler.h"
 
 void setStrArgument(char ** variable, char * arg) {
     *variable = arg;
@@ -18,9 +21,9 @@ int checkArguments(char * user_file_path, char * pass_file_path, char * ip) {
 	else if (pass_file_path == NULL) {
 		return 2;
 	}
-	else (ip == NULL) {
+	else if (ip == NULL) {
 		return 3;
-	}
+        }
 	
 	return 0;
 }
@@ -31,19 +34,19 @@ int checkArguments(char * user_file_path, char * pass_file_path, char * ip) {
  */
 void argExitError(int argStatus) {
 	if (argStatus == 1) {
-		printf("Error: exited with error code %d, path to userlist not set", argStatus);
+		printf("Error: exited with error code %d, path to userlist not set\n", argStatus);
 		exit(EXIT_FAILURE);
 	}
 	else if (argStatus == 2) {
-		printf("Error: exited with error code %d, path to passwordlist not set", argStatus);
+		printf("Error: exited with error code %d, path to passwordlist not set\n", argStatus);
 		exit(EXIT_FAILURE);
 	}
 	else if (argStatus == 3) {
-		printf("Error: exited with error code %d, ip not set", argStatus);
+		printf("Error: exited with error code %d, ip not set\n", argStatus);
 		exit(EXIT_FAILURE);
 	}
 	else {
-		printf("Error: exited with unknown error code %d", argStatus);
+		printf("Error: exited with unknown error code %d\n", argStatus);
 		exit(EXIT_FAILURE);
 	}
 }

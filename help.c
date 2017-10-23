@@ -1,4 +1,7 @@
-#include <help.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+#include "help.h"
 
 void displayHelpScreen() {
 	puts("Usage: rpccracker [OPTIONS...] [-u userlist] [-p passwordlist] [-i ipaddress]");

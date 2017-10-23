@@ -1,4 +1,7 @@
-#include <cmd.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+#include "cmd.h"
 
 /**
  * @brief This function creates a command to execute the rpcclient testme command
@@ -20,7 +23,7 @@ void createRcpClientTestmeCmd(char * command, char * user_line, char * pass_line
  * @return The result code of rpcclient. 0 means that the cmd was successful
  */
 int executeRcpClientTestmeCmd(char * command, char * user_line, char * pass_line, char * ip) {
-	createRcpClientTestmeCmd(char * command, char * user_line, char * pass_line, char * ip)
+	createRcpClientTestmeCmd(command, user_line, pass_line, ip);
 	
 	return system(command); // Execute command
 }
