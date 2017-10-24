@@ -34,15 +34,15 @@ int checkArguments(char * user_file_path, char * pass_file_path, char * ip) {
  */
 void argExitError(int argStatus) {
 	if (argStatus == 1) {
-		printf("Error: exited with error code %d, path to userlist not set\n", argStatus);
+		printf("Error: exited with error code %d, path to userlist not set (-u)\n", argStatus);
 		exit(EXIT_FAILURE);
 	}
 	else if (argStatus == 2) {
-		printf("Error: exited with error code %d, path to passwordlist not set\n", argStatus);
+		printf("Error: exited with error code %d, path to passwordlist not set (-p)\n", argStatus);
 		exit(EXIT_FAILURE);
 	}
 	else if (argStatus == 3) {
-		printf("Error: exited with error code %d, ip not set\n", argStatus);
+		printf("Error: exited with error code %d, ip not set (-i)\n", argStatus);
 		exit(EXIT_FAILURE);
 	}
 	else {

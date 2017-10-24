@@ -23,8 +23,8 @@ int main(int argc, char **argv)
 
     char command[100];
 
-	/***** Handle arguments *****/
-	/*** Load arguments ***/
+    /***** Handle arguments *****/
+    /*** Load arguments ***/
     for (int i = 1; i < argc; i++) { // i = 1 because the first arg = the name of the exe
         if (argv[i][0] == '-') {
             if (strcmp(ARG_USER, argv[i]) == 0) {
@@ -39,7 +39,7 @@ int main(int argc, char **argv)
                 i++;
                 setStrArgument(&ip, argv[i]);
             }
-			else if (strcmp(ARG_HELP, argv[i]) == 0) {
+		else if (strcmp(ARG_HELP, argv[i]) == 0) {
                 help = 1;
             }
             else {
@@ -49,41 +49,45 @@ int main(int argc, char **argv)
         }
     }
 	
-	/*** Check if the user requested the help screen ***/
-	if (help == 1) {
-		displayHelpScreen();
-		exit(EXIT_SUCCESS); // It's either using the app, or getting help
-	}
+    /*** Check if the user requested the help screen ***/
+     if (help == 1) {
+        displayHelpScreen();
+        exit(EXIT_SUCCESS); // It's either using the app, or getting help
+    }
 	
-	/*** Check arguments for errors ***/
-	/** Check if minimal arguments are set **/
-	argCheck = checkArguments(user_file_path, pass_file_path, ip);
-	if (argCheck != 0)
-		argExitError(argCheck);
+    /*** Check arguments for errors ***/
+    /** Check if minimal arguments are set **/
+    argCheck = checkArguments(user_file_path, pass_file_path, ip);
+    if (argCheck != 0)
+        argExitError(argCheck);
 
 
-	/***** Read user and password lists *****/
-    FILE *pass_fp, *user_fp;
+    /***** Read user and password lists *****/
+    FILE *user_fp;
     char *user_line = NULL;
     size_t user_len = 0;
-    ssize_t user_read, pass_read;
+    ssize_t user_read;
 
     user_fp = fopen(user_file_path, "r");
-	pass_fp = fopen(pass_file_path, "r");
+
     if (user_fp == NULL) {
-		printf("Error: user list %s does not exist", user_file_path);
+        printf("Error: user list %s does not exist", user_file_path);
         exit(EXIT_FAILURE);
-	}
-	else if (pass_fp == NULL) {
-		printf("Error: password list %s does not exist", pass_file_path);
-        exit(EXIT_FAILURE);
-	}
+    }
 
     while ((user_read = getline(&user_line, &user_len, user_fp)) != -1) {
+        FILE *pass_fp;
         char *pass_line = NULL;
         size_t pass_len = 0;
+        ssize_t pass_read;
 		
-		printf("\n");
+	pass_fp = fopen(pass_file_path, "r");
+	if (pass_fp == NULL) {
+	    printf("Error: password list %s does not exist", pass_file_path);
+            exit(EXIT_FAILURE);
+	}
+
+        printf("\n");
         printf("Trying user %s\n", user_line);
 
         user_line[strcspn(user_line, "\n")] = 0; // Remove trailing newline
@@ -92,11 +96,9 @@ int main(int argc, char **argv)
             int output;
             pass_line[strcspn(pass_line, "\n")] = 0; // Remove trailing newline
 
-            //sprintf(command, "rpcclient -U \"%s\"%\"%s\" -c \"testme\" %s > /dev/null 2>&1", user_line, pass_line, ip);
-            //output = system(command);
-			output = executeRcpClientTestmeCmd(command, user_line, pass_line, ip);
+            output = executeRcpClientTestmeCmd(command, user_line, pass_line, ip);
             if (output == 0) {
-				printf("\n");
+                printf("\n");
                 printf("Valid credentials for host %s:\n", ip);
                 printf("\tUsername:\t%s\n", user_line);
                 printf("\tPassword:\t%s\n", pass_line);
@@ -105,14 +107,14 @@ int main(int argc, char **argv)
     
         if (pass_line)
             free(pass_line);
-    }
 
-    fclose(user_fp);
-	fclose(pass_fp);
+        if (pass_fp)
+            fclose(pass_fp);
+    }
 
     if (user_line)
         free(user_line);
 
-	puts(""); // Add extra line to cleanly separate the output at the end
+    puts(""); // Add extra line to cleanly separate the output at the end
     exit(EXIT_SUCCESS);
 }
