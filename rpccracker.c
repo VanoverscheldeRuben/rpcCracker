@@ -76,6 +76,8 @@ int main(int argc, char **argv)
     }
 
     while ((user_read = getline(&user_line, &user_len, user_fp)) != -1) {
+        int found_pass = 0;
+
         FILE *pass_fp;
         char *pass_line = NULL;
         size_t pass_len = 0;
@@ -87,22 +89,28 @@ int main(int argc, char **argv)
             exit(EXIT_FAILURE);
 	}
 
-        printf("\n");
-        printf("Trying user %s\n", user_line);
+        printf("Trying user %s", user_line);
 
         user_line[strcspn(user_line, "\n")] = 0; // Remove trailing newline
         
-        while ((pass_read = getline(&pass_line, &pass_len, pass_fp)) != -1) {
+        while ((pass_read = getline(&pass_line, &pass_len, pass_fp)) != -1 && found_pass == 0) {
             int output;
             pass_line[strcspn(pass_line, "\n")] = 0; // Remove trailing newline
 
             output = executeRcpClientTestmeCmd(command, user_line, pass_line, ip);
             if (output == 0) {
-                printf("\n");
                 printf("Valid credentials for host %s:\n", ip);
                 printf("\tUsername:\t%s\n", user_line);
                 printf("\tPassword:\t%s\n", pass_line);
+                printf("\n");
+
+                found_pass = 1;
             }
+        }
+
+        if (found_pass == 0) {
+            printf("No password match for user %s...\n", user_line);
+            printf("\n");
         }
     
         if (pass_line)
