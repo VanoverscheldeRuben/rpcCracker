@@ -6,6 +6,7 @@
 #include "argumenthandler.h"
 #include "help.h"
 #include "cmd.h"
+#include "listmanager.h"
 
 #define ARG_USER "-u"
 #define ARG_PASSWD "-p"
@@ -61,6 +62,24 @@ int main(int argc, char **argv)
     if (argCheck != 0)
         argExitError(argCheck);
 
+    cList * passList = NULL;
+    initList(&passList);
+    cList *current = passList;
+
+    addToList(current, "password");
+    addToList(current, "Admin123");
+    addToList(current, "openmeup");
+
+    displayList(passList);
+
+    if (passList == NULL) {
+        puts("Error: failed to initialize password list");
+        exit(EXIT_FAILURE);
+    }
+    else
+        puts("Initialized password list");
+    
+    exit(EXIT_SUCCESS); // DELETE ME LATER
 
     /***** Read user and password lists *****/
     FILE *user_fp;
