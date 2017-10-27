@@ -22,8 +22,9 @@ void addEntry(cList *list) {
 
 void addToList(cList *head, char *str) {
     cList * current = head; // Go to the end of the list
-    while (current->nextEntry != NULL)
+    while (current->nextEntry != NULL) {
         current = current->nextEntry;
+    }
 
     int length = strlen(str);
     if (current->str != NULL) // This entry is already filled. Create a new one
