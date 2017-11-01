@@ -35,6 +35,20 @@ void addToList(cList *head, char *str) {
     strcpy(current->str, str);
 }
 
+cList* getEntry(cList *head, int index) {
+    cList * current = head;
+    int i = 0;
+    while (current != NULL) {
+        if (i == index)
+            return current;
+
+        current = current->nextEntry;
+        i++;
+    }
+
+    return NULL;
+}
+
 void displayList(cList *head) {
     cList * current = head;
     while (current != NULL) {

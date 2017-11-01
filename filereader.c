@@ -5,6 +5,7 @@
 #include "listmanager.h"
 #include "filereader.h"
 #include "cmd.h"
+#include "mutator.h"
 
 void loadFileIntoList(cList *list, char *path) {
     FILE *fp;
@@ -45,15 +46,24 @@ void applyPasswordFileDirectly(char *ip, char *user, char *path) {
         pass[strcspn(pass, "\n")] = 0; // Remove trailing newline
 
         int output = 1;
-        output = executeRcpClientTestmeCmd(command, user, pass, ip);
+        cList *passList = createMutatedListOfWord(pass);
+        while (passList != NULL && output != 0) {
+            output = executeRcpClientTestmeCmd(command, user, passList->str, ip);
+            
+            if (output != 0)
+                passList = passList->nextEntry;
+        }
+
         if (output == 0) {
             printf("Valid credentials for host %s:\n", ip);
             printf("\tUsername:\t%s\n", user);
-            printf("\tPassword:\t%s\n", pass);
+            printf("\tPassword:\t%s\n", passList->str);
             printf("\n");
 
             found_pass = 1;
         }
+
+        freeList(passList);
     }
 
     if (pass)
