@@ -42,3 +42,13 @@ void displayList(cList *head) {
         current = current->nextEntry;
     }
 }
+
+void freeList(cList *head) {
+    cList * current = head;
+    while (current != NULL) {
+        cList * freeMe = current;
+        free(freeMe);
+
+        current = current->nextEntry;
+    }
+}

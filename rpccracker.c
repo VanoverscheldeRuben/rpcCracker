@@ -67,81 +67,57 @@ int main(int argc, char **argv)
     /*** Read password list  ***/
     cList * passList = NULL;
     initList(&passList);
-    cList *currPass = passList;
+    cList *passLoader = passList;
 
-    loadFileIntoList(currPass, pass_file_path);
-    displayList(passList);
+    loadFileIntoList(passLoader, pass_file_path);
+    //displayList(passList);
 
     /*** Read user list  ***/
     cList * userList = NULL;
     initList(&userList);
-    cList *currUser = userList;
+    cList *userLoader = userList;
 
-    loadFileIntoList(currUser, user_file_path);
-    displayList(userList);
+    loadFileIntoList(userLoader, user_file_path);
+    //displayList(userList);
 
-    exit(EXIT_SUCCESS); // DELETE ME LATER
 
-    /***** Read user and password lists *****/
-    FILE *user_fp;
-    char *user_line = NULL;
-    size_t user_len = 0;
-    ssize_t user_read;
-
-    user_fp = fopen(user_file_path, "r");
-
-    if (user_fp == NULL) {
-        printf("Error: user list %s does not exist", user_file_path);
-        exit(EXIT_FAILURE);
-    }
-
-    while ((user_read = getline(&user_line, &user_len, user_fp)) != -1) {
+    /***** Password guess code *****/
+    cList * currUser = userList;
+    while (currUser != NULL) {
         int found_pass = 0;
 
-        FILE *pass_fp;
-        char *pass_line = NULL;
-        size_t pass_len = 0;
-        ssize_t pass_read;
-		
-	pass_fp = fopen(pass_file_path, "r");
-	if (pass_fp == NULL) {
-	    printf("Error: password list %s does not exist", pass_file_path);
-            exit(EXIT_FAILURE);
-	}
+        printf("Trying user %s\n", currUser->str);
 
-        printf("Trying user %s", user_line);
+        cList * currPass = passList; 
+        while (currPass!= NULL && found_pass == 0) {
+            int output = 1;
 
-        user_line[strcspn(user_line, "\n")] = 0; // Remove trailing newline
-        
-        while ((pass_read = getline(&pass_line, &pass_len, pass_fp)) != -1 && found_pass == 0) {
-            int output;
-            pass_line[strcspn(pass_line, "\n")] = 0; // Remove trailing newline
-
-            output = executeRcpClientTestmeCmd(command, user_line, pass_line, ip);
+            output = executeRcpClientTestmeCmd(command, currUser->str, currPass->str, ip);
             if (output == 0) {
                 printf("Valid credentials for host %s:\n", ip);
-                printf("\tUsername:\t%s\n", user_line);
-                printf("\tPassword:\t%s\n", pass_line);
+                printf("\tUsername:\t%s\n", currUser->str);
+                printf("\tPassword:\t%s\n", currPass->str);
                 printf("\n");
 
                 found_pass = 1;
             }
+
+            currPass = currPass->nextEntry;
         }
 
         if (found_pass == 0) {
-            printf("No password match for user %s...\n", user_line);
+            printf("No password match for user %s...\n", currUser->str);
             printf("\n");
         }
-    
-        if (pass_line)
-            free(pass_line);
 
-        if (pass_fp)
-            fclose(pass_fp);
+        currUser = currUser->nextEntry;
     }
 
-    if (user_line)
-        free(user_line);
+
+    /*** Free allocated memory ***/
+    freeList(userList);
+    freeList(passList);
+
 
     puts(""); // Add extra line to cleanly separate the output at the end
     exit(EXIT_SUCCESS);

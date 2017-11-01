@@ -9,3 +9,4 @@ void initEntry(cList *list);
 void addEntry(cList *list);
 void addToList(cList *list, char *str);
 void displayList(cList *list);
+void freeList(cList *head);
