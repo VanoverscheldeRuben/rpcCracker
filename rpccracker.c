@@ -16,7 +16,7 @@
 
 int main(int argc, char **argv)
 {
-    char * user_file_path = NULL;
+    char * username = NULL;
     char * pass_file_path = NULL;
     char * ip = NULL;
     int help;
@@ -31,7 +31,7 @@ int main(int argc, char **argv)
         if (argv[i][0] == '-') {
             if (strcmp(ARG_USER, argv[i]) == 0) {
                 i++;
-                setStrArgument(&user_file_path, argv[i]);
+                setStrArgument(&username, argv[i]);
             }
             else if (strcmp(ARG_PASSWD, argv[i]) == 0) {
                 i++;
@@ -59,67 +59,13 @@ int main(int argc, char **argv)
 	
     /*** Check arguments for errors ***/
     /** Check if minimal arguments are set **/
-    argCheck = checkArguments(user_file_path, pass_file_path, ip);
+    argCheck = checkArguments(username, pass_file_path, ip);
     if (argCheck != 0)
         argExitError(argCheck);
 
-    /***** Read data lists  *****/
-    /*** Read password list  ***/
-    //cList * passList = NULL;
-    //initList(&passList);
-    //cList *passLoader = passList;
-
-    //loadFileIntoList(passLoader, pass_file_path);
-    //displayList(passList);
-
-    /*** Read user list  ***/
-    cList * userList = NULL;
-    initList(&userList);
-    cList *userLoader = userList;
-
-    loadFileIntoList(userLoader, user_file_path);
-    //displayList(userList);
-
-
+    
     /***** Password guess code *****/
-    cList * currUser = userList;
-    while (currUser != NULL) {
-        applyPasswordFileDirectly(ip, currUser->str, pass_file_path);
-        currUser = currUser->nextEntry;
-
-/*        int found_pass = 0;
-
-        printf("Trying user %s\n", currUser->str);
-
-        cList * currPass = passList; 
-        while (currPass!= NULL && found_pass == 0) {
-            int output = 1;
-
-            output = executeRcpClientTestmeCmd(command, currUser->str, currPass->str, ip);
-            if (output == 0) {
-                printf("Valid credentials for host %s:\n", ip);
-                printf("\tUsername:\t%s\n", currUser->str);
-                printf("\tPassword:\t%s\n", currPass->str);
-                printf("\n");
-
-                found_pass = 1;
-            }
-
-            currPass = currPass->nextEntry;
-        }
-
-        if (found_pass == 0) {
-            printf("No password match for user %s...\n", currUser->str);
-            printf("\n");
-        }*/
-
-        //currUser = currUser->nextEntry;
-    }
-
-
-    /*** Free allocated memory ***/
-    freeList(userList);
-    //freeList(passList);
+    applyPasswordFileDirectly(ip, username, pass_file_path);
 
 
     puts(""); // Add extra line to cleanly separate the output at the end
