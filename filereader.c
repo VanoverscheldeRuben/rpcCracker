@@ -47,6 +47,10 @@ void applyPasswordFileDirectly(char *ip, char *user, char *path) {
 
         int output = 1;
         cList *passList = createMutatedListOfWord(pass);
+
+        cList *head = passList;
+        displayList(head);
+
         while (passList != NULL && output != 0) {
             output = executeRcpClientTestmeCmd(command, user, passList->str, ip);
             

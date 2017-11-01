@@ -42,6 +42,6 @@ done
 
 
 echo "Combining all compiled scripts into one executable..."
-gcc -o rpccracker $objs_to_compile
+gcc -o rpccracker $objs_to_compile -lm
 
 echo "Done!"
