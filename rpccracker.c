@@ -65,11 +65,11 @@ int main(int argc, char **argv)
 
     /***** Read data lists  *****/
     /*** Read password list  ***/
-    cList * passList = NULL;
-    initList(&passList);
-    cList *passLoader = passList;
+    //cList * passList = NULL;
+    //initList(&passList);
+    //cList *passLoader = passList;
 
-    loadFileIntoList(passLoader, pass_file_path);
+    //loadFileIntoList(passLoader, pass_file_path);
     //displayList(passList);
 
     /*** Read user list  ***/
@@ -84,7 +84,10 @@ int main(int argc, char **argv)
     /***** Password guess code *****/
     cList * currUser = userList;
     while (currUser != NULL) {
-        int found_pass = 0;
+        applyPasswordFileDirectly(ip, currUser->str, pass_file_path);
+        currUser = currUser->nextEntry;
+
+/*        int found_pass = 0;
 
         printf("Trying user %s\n", currUser->str);
 
@@ -108,15 +111,15 @@ int main(int argc, char **argv)
         if (found_pass == 0) {
             printf("No password match for user %s...\n", currUser->str);
             printf("\n");
-        }
+        }*/
 
-        currUser = currUser->nextEntry;
+        //currUser = currUser->nextEntry;
     }
 
 
     /*** Free allocated memory ***/
     freeList(userList);
-    freeList(passList);
+    //freeList(passList);
 
 
     puts(""); // Add extra line to cleanly separate the output at the end
